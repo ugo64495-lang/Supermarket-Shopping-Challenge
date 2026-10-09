@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#123d2b">
+<title>Supermarket Shopping Challenge</title>
+<style>
+:root{--green:#176b43;--deep:#103c2b;--gold:#ffd166;--cream:#fff9e9;--ink:#18352a;--red:#c83d4d}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#eaf2e8;color:var(--ink)}
+button{font:inherit;cursor:pointer;touch-action:manipulation}
+.game{max-width:1050px;margin:auto;min-height:100vh;background:var(--cream);overflow:hidden}
+.top{background:linear-gradient(135deg,#103c2b,#20794c);color:white;padding:16px 18px 14px}
+.brand{display:flex;align-items:center;gap:12px}.logo{font-size:32px;background:#ffffff20;border:1px solid #ffffff55;border-radius:14px;width:55px;height:55px;display:grid;place-items:center}
+h1{font-size:clamp(21px,4vw,30px);margin:0;line-height:1.1}.tag{font-size:13px;color:#d8f3df;margin-top:5px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:15px}.stat{background:#ffffff16;border:1px solid #ffffff2b;border-radius:12px;padding:9px 10px}.stat small{display:block;font-size:11px;color:#d8f3df}.stat strong{font-size:19px}
+main{padding:14px}.mission{background:#fff0bd;border:1px solid #f1d77a;border-radius:15px;padding:13px 14px;display:flex;align-items:center;gap:12px}.basket{font-size:35px}.mission small{display:block;color:#795c12;font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-size:10px}.mission strong{font-size:19px}.mission p{margin:3px 0 0;font-size:13px;color:#6d5a28}
+.scene{margin-top:13px;border-radius:16px;overflow:hidden;background:linear-gradient(#bfe6ee 0 38%,#e6d8b6 38% 100%);border:1px solid #d0d8c8;position:relative;min-height:170px}
+.store-sign{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:#176b43;color:white;border:3px solid #e6c96b;border-radius:9px;padding:7px 15px;font-weight:900;letter-spacing:.12em;white-space:nowrap;font-size:13px;z-index:2}
+.floor{position:absolute;bottom:0;height:40%;width:100%;background:repeating-linear-gradient(90deg,#d7c49b 0 48px,#e7d8b5 48px 96px);border-top:5px solid #c5b48d}
+.shelf{position:absolute;top:54px;left:5%;width:90%;height:87px;background:#8b583b;border:5px solid #69412d;border-radius:5px;display:grid;grid-template-columns:repeat(6,1fr);gap:6px;padding:7px;box-shadow:0 8px 0 #a8794e}.shelf div{border-radius:5px;display:grid;place-items:center;font-size:clamp(20px,5vw,32px);box-shadow:inset 0 -5px #00000012;background:#fff}
+.shelf div:nth-child(1){background:#ffdb69}.shelf div:nth-child(2){background:#f8a7a7}.shelf div:nth-child(3){background:#b8e4b3}.shelf div:nth-child(4){background:#c5d9ff}.shelf div:nth-child(5){background:#f7c3f3}.shelf div:nth-child(6){background:#ffe1ae}
+.cart-graphic{position:absolute;right:6%;bottom:8px;font-size:46px;filter:drop-shadow(0 3px 1px #755)}
+.scene-caption{position:relative;z-index:3;text-align:center;padding-top:145px;padding-bottom:10px;font-size:12px;font-weight:800;color:#385442;text-shadow:0 1px #fff}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:18px 2px 9px;gap:8px}.section-head h2{font-size:17px;margin:0}.section-head span{font-size:12px;color:#66776a}
+.products{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.product{border:2px solid #dce5d8;background:white;border-radius:14px;min-height:106px;padding:10px 5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--ink);transition:transform .12s,border-color .12s}
+.product:active{transform:scale(.97)}.product .emoji{font-size:30px;line-height:1.2}.product b{font-size:13px}.product small{font-size:11px;color:#6c7b6e}.product:focus-visible{outline:3px solid #257b50;outline-offset:2px}
+.product.correct{border-color:#218653;background:#e5f8e9}.product.wrong{border-color:#d64d5d;background:#fff0f0}
+.feedback{min-height:26px;text-align:center;font-weight:800;font-size:13px;margin:10px 0 0;color:#176b43}.feedback.bad{color:#bd3345}
+.actions{display:flex;gap:9px;margin-top:8px}.action{border:0;border-radius:12px;padding:12px 14px;font-weight:800;flex:1;min-height:46px}.primary{background:var(--green);color:white}.secondary{background:#e4eadf;color:#244a35}
+.hint{font-size:12px;line-height:1.5;color:#647467;margin:12px 2px 4px}.overlay{position:absolute;inset:0;background:#0c2b20eF;color:white;z-index:10;display:flex;align-items:center;justify-content:center;padding:22px;text-align:center}.overlay-card{max-width:430px}.overlay .big{font-size:54px}.overlay h2{font-size:25px;margin:7px 0}.overlay p{line-height:1.55;color:#e0f0e4;font-size:14px}.overlay button{border:0;border-radius:12px;padding:13px 24px;background:var(--gold);color:#2f381c;font-weight:900;margin-top:8px}
+footer{text-align:center;padding:16px;font-size:11px;color:#738071}
+@media(min-width:650px){main{padding:20px 26px}.products{grid-template-columns:repeat(6,minmax(0,1fr))}.scene{min-height:205px}.shelf{height:100px}.scene-caption{padding-top:163px}.product{min-height:122px}}
+</style>
+</head>
+<body>
+<div class="game">
+<header class="top">
+  <div class="brand"><div class="logo" aria-hidden="true">🛒</div><div><h1>Supermarket Shopping Challenge</h1><div class="tag">Shop smart • Beat the clock • Level up!</div></div></div>
+  <div class="stats">
+    <div class="stat"><small>SCORE</small><strong id="score">0</strong></div>
+    <div class="stat"><small>LEVEL</small><strong id="level">1</strong></div>
+    <div class="stat"><small>❤️ LIVES</small><strong id="lives">❤️❤️❤️</strong></div>
+    <div class="stat"><small>⏱ TIME</small><strong id="time">60s</strong></div>
+  </div>
+</header>
+<main>
+  <section class="mission" aria-live="polite"><div class="basket">🧺</div><div><small>Customer request</small><strong id="request">Find the bread</strong><p id="missionText">Tap the item the customer wants.</p></div></section>
+  <section class="scene" aria-label="Illustrated supermarket aisle">
+    <div class="store-sign">FRESH MART</div>
+    <div class="shelf"><div>🍞</div><div>🥛</div><div>🍎</div><div>🧃</div><div>🍌</div><div>🥚</div></div>
+    <div class="floor"></div><div class="cart-graphic">🛒</div>
+    <div class="scene-caption">AISLE 1 · FRESH FOOD & DAILY ESSENTIALS</div>
+  </section>
+  <div class="section-head"><h2>🛍️ Pick the right product</h2><span id="progress">0 items collected</span></div>
+  <section class="products" id="products" aria-label="Products to choose from"></section>
+  <div id="feedback" class="feedback" aria-live="polite">Ready? Find the item shown above!</div>
+  <div class="actions"><button type="button" class="action secondary" id="hintBtn">💡 Hint</button><button type="button" class="action secondary" id="soundBtn" aria-pressed="false">🔊 Sound: Off</button></div>
+  <p class="hint">How to play: tap the requested product before time runs out. Correct choices earn points. Wrong choices cost a life. Every 5 successful items advances you to the next level, where the clock gets faster. Works with touch or mouse.</p>
+</main>
+<footer>Supermarket Shopping Challenge · A casual mobile-friendly game</footer>
+<div class="overlay" id="overlay">
+  <div class="overlay-card"><div class="big">🛒🥦🍞</div><h2 id="overlayTitle">Ready to shop?</h2><p id="overlayText">Help customers find the products they need. Collect points, protect your three lives, and see how many levels you can complete!</p><button type="button" id="startBtn">START SHOPPING</button></div>
+</div>
+</div>
+<script>
+(function(){
+const items=[
+ {name:"Bread",emoji:"🍞",price:"₦900"},{name:"Milk",emoji:"🥛",price:"₦1,200"},{name:"Apple",emoji:"🍎",price:"₦700"},
+ {name:"Juice",emoji:"🧃",price:"₦1,000"},{name:"Banana",emoji:"🍌",price:"₦500"},{name:"Eggs",emoji:"🥚",price:"₦1,800"},
+ {name:"Rice",emoji:"🍚",price:"₦3,500"},{name:"Fish",emoji:"🐟",price:"₦2,000"},{name:"Carrot",emoji:"🥕",price:"₦600"},
+ {name:"Cheese",emoji:"🧀",price:"₦1,400"},{name:"Tomato",emoji:"🍅",price:"₦400"},{name:"Water",emoji:"💧",price:"₦300"}
+];
+const $=id=>document.getElementById(id);
+let score=0,level=1,lives=3,time=60,timer=null,active=false,target=null,successes=0,collected=0,sound=false,locked=false;
+function shuffle(arr){return arr.slice().sort(()=>Math.random()-.5)}
+function say(text,bad=false){$("feedback").textContent=text;$("feedback").className="feedback"+(bad?" bad":"")}
+function beep(ok){if(!sound)return;try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const c=new C(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=ok?720:180;g.gain.value=.07;o.start();o.stop(c.currentTime+.12)}catch(e){}}
+function update(){ $("score").textContent=score;$("level").textContent=level;$("lives").textContent="❤️".repeat(lives)+"🤍".repeat(3-lives);$("time").textContent=time+"s";$("progress").textContent=collected+" items collected"}
+function newRound(){
+ if(!active)return;
+ locked=false;
+ const available=shuffle(items).slice(0,6);
+ target=available[Math.floor(Math.random()*available.length)];
+ $("request").textContent="Find the "+target.name.toLowerCase();
+ $("missionText").textContent="Customer needs "+target.name.toLowerCase()+". Tap its card below.";
+ const grid=$("products");grid.innerHTML="";
+ shuffle(available).forEach(item=>{
+  const b=document.createElement("button");b.type="button";b.className="product";b.setAttribute("aria-label",item.name+", "+item.price);
+  b.innerHTML='<span class="emoji" aria-hidden="true">'+item.emoji+'</span><b>'+item.name+'</b><small>'+item.price+'</small>';
+  b.addEventListener("click",()=>choose(item,b));grid.appendChild(b);
+ });
+}
+function choose(item,button){
+ if(!active||locked)return;
+ if(item.name===target.name){
+  locked=true;button.classList.add("correct");score+=10*level;successes++;collected++;say("✅ Correct! Customer is happy. +"+(10*level)+" points.");beep(true);update();
+  if(successes%5===0){level++;time=Math.min(60,time+8);say("🎉 Level "+level+" unlocked! Bonus time added.");}
+  setTimeout(()=>{if(active){if(time<=0){endGame(false)}else newRound()}},650);
+ }else{
+  button.classList.add("wrong");lives--;say("❌ Not quite! Look for "+target.name+".",true);beep(false);update();
+  if(lives<=0){endGame(false);return}
+  button.disabled=true;
+ }
+}
+function tick(){if(!active)return;time--;update();if(time<=0)endGame(false)}
+function start(){clearInterval(timer);score=0;level=1;lives=3;time=60;successes=0;collected=0;active=true;update();$("overlay").style.display="none";say("Let's go! Find the requested product.");newRound();timer=setInterval(tick,1000)}
+function endGame(won){active=false;clearInterval(timer);$("overlay").style.display="flex";$("overlayTitle").textContent=won?"Shop complete!":"Time to check out!";$("overlayText").textContent="Final score: "+score+". You collected "+collected+" items and reached level "+level+". "+(lives>0?"Can you beat your score?":"Your three lives are used up. Try again and shop faster!");$("startBtn").textContent="PLAY AGAIN";$("request").textContent="Shopping session finished";$("missionText").textContent="Tap Play Again to start a new round.";say("Game over — final score: "+score+".")}
+$("startBtn").addEventListener("click",start);
+$("hintBtn").addEventListener("click",()=>{if(!active||!target){say("Press START SHOPPING first.");return}say("💡 Hint: look for "+target.emoji+" — "+target.name+".");});
+$("soundBtn").addEventListener("click",()=>{sound=!sound;$("soundBtn").textContent=sound?"🔊 Sound: On":"🔊 Sound: Off";$("soundBtn").setAttribute("aria-pressed",String(sound));say(sound?"Sound enabled.":"Sound disabled.");});
+update();
+})();
+</script>
+</body>
+</html>
